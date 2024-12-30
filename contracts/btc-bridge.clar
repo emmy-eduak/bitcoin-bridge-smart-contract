@@ -293,9 +293,11 @@
 
 (define-read-only (is-valid-principal (address principal))
     (and 
-        (is-ok (principal-destruct? address))
         (not (is-eq address CONTRACT-DEPLOYER))
         (not (is-eq address (as-contract tx-sender)))
+        ;; Additional check to ensure address is not zero/null
+        (not (is-eq address 'SP000000000000000000002Q6VF78))
+        true
     )
 )
 
