@@ -45,3 +45,40 @@
 (define-constant MIN-DEPOSIT-AMOUNT u100000)
 (define-constant MAX-DEPOSIT-AMOUNT u1000000000)
 (define-constant REQUIRED-CONFIRMATIONS u6)
+
+;; -----------------------------------------------------------------------------
+;; State Variables
+;; -----------------------------------------------------------------------------
+
+(define-data-var bridge-paused bool false)
+(define-data-var total-bridged-amount uint u0)
+(define-data-var last-processed-height uint u0)
+
+;; -----------------------------------------------------------------------------
+;; Data Maps
+;; -----------------------------------------------------------------------------
+
+;; Stores deposit information including amount, recipient, and processing status
+(define-map deposits 
+    { tx-hash: (buff 32) }
+    {
+        amount: uint,
+        recipient: principal,
+        processed: bool,
+        confirmations: uint,
+        timestamp: uint,
+        btc-sender: (buff 33)
+    }
+)
+
+;; Tracks authorized validators
+(define-map validators principal bool)
+
+;; Records validator signatures for deposit confirmations
+(define-map validator-signatures
+    { tx-hash: (buff 32), validator: principal }
+    { signature: (buff 65), timestamp: uint }
+)
+
+;; Maintains user balances in the bridge
+(define-map bridge-balances principal uint)
