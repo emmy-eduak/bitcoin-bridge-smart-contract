@@ -82,3 +82,54 @@
 
 ;; Maintains user balances in the bridge
 (define-map bridge-balances principal uint)
+
+;; -----------------------------------------------------------------------------
+;; Administrative Functions
+;; -----------------------------------------------------------------------------
+
+(define-public (initialize-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (var-set bridge-paused false)
+        (ok true)
+    )
+)
+
+(define-public (pause-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (var-set bridge-paused true)
+        (ok true)
+    )
+)
+
+(define-public (resume-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (var-get bridge-paused) (err ERROR-INVALID-BRIDGE-STATUS))
+        (var-set bridge-paused false)
+        (ok true)
+    )
+)
+
+;; -----------------------------------------------------------------------------
+;; Validator Management
+;; -----------------------------------------------------------------------------
+
+(define-public (add-validator (validator principal))
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (is-valid-principal validator) (err ERROR-INVALID-VALIDATOR-ADDRESS))
+        (map-set validators validator true)
+        (ok true)
+    )
+)
+
+(define-public (remove-validator (validator principal))
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (is-valid-principal validator) (err ERROR-INVALID-VALIDATOR-ADDRESS))
+        (map-set validators validator false)
+        (ok true)
+    )
+)
