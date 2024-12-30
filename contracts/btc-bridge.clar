@@ -39,3 +39,9 @@
 (define-constant ERROR-INVALID-BTC-ADDRESS u1009)
 (define-constant ERROR-INVALID-TX-HASH u1010)
 (define-constant ERROR-INVALID-SIGNATURE-FORMAT u1011)
+
+;; Bridge Configuration
+(define-constant CONTRACT-DEPLOYER tx-sender)
+(define-constant MIN-DEPOSIT-AMOUNT u100000)
+(define-constant MAX-DEPOSIT-AMOUNT u1000000000)
+(define-constant REQUIRED-CONFIRMATIONS u6)
