@@ -266,3 +266,23 @@
         )
     )
 )
+
+;; -----------------------------------------------------------------------------
+;; Read-Only Functions
+;; -----------------------------------------------------------------------------
+
+(define-read-only (get-deposit (tx-hash (buff 32)))
+    (map-get? deposits {tx-hash: tx-hash})
+)
+
+(define-read-only (get-bridge-status)
+    (var-get bridge-paused)
+)
+
+(define-read-only (get-validator-status (validator principal))
+    (default-to false (map-get? validators validator))
+)
+
+(define-read-only (get-bridge-balance (user principal))
+    (default-to u0 (map-get? bridge-balances user))
+)
